@@ -33,7 +33,9 @@ module.exports = {
       }
     }
   },
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-this-alias': 1
+  },
   overrides: [
     {
       files: ['*.ts?(x)'], // ts或者tsx文件，不检查没有定义的变量。因为ts本身就会检查这个

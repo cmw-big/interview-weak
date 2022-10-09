@@ -9,7 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "homepage": "https://cmw-big.github.io/github-actions-demo",
   "devDependencies": {
     "@types/node": "^18.8.3",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
@@ -20,6 +19,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "typescript": "^4.8.4"
   }
