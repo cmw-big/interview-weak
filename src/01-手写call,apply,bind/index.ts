@@ -25,7 +25,7 @@ Function.prototype.myCall = function (this, context, ...args) {
 /**
  * 手写apply方法
  */
-Function.prototype.myApply = function (this, context, args) {
+Function.prototype.myApply = function (this, context: any, args = []) {
   if (typeof this !== 'function') {
     throw new Error(`${context}.myCall is not a function`)
   }
