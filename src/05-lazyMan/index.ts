@@ -1,5 +1,4 @@
-﻿type fn = (...args: any[]) => any
-class LazyMan {
+﻿class LazyMan {
   private tasks: fn[] = []
   private name = ''
   constructor(name: string) {

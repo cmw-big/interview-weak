@@ -17,3 +17,5 @@ interface Function {
 interface Function {
   myBind: CallableFunction['bind']
 }
+
+type fn = <T extends number>(...args: T[]) => Promise<number | undefined>
