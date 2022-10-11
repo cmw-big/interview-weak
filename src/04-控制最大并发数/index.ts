@@ -1,4 +1,5 @@
-﻿/**
+﻿import { sleep } from './../utils/sleep'
+/**
  * 控制任务的最大并发数
  */
 import { generatePromiseList } from '../utils'
@@ -50,12 +51,46 @@ export const promiseLimit = (
   })
 }
 const taskList = generatePromiseList(5)
-promiseLimit(taskList, 3, (index?: number) => {
-  return index
-}).then(console.log)
+// promiseLimit(taskList, 3, (index?: number) => {
+//   return index
+// }).then(console.log)
 
 /**
- * 控制并发数的基本思路：
- * 1. 首先肯定是将limit的那几个执行完成。
- * 2. 然后就是完成一个，就执行下一个。
+ * 上面是已存在的函数的并发限制
+ * 下面这种是新函数调用的并发限制。
  */
+
+/**
+ *
+ * @param limit 并发限制的数量
+ */
+const newFuncLimit = (limit: number) => {
+  const queue: [Fn, unknown[]][] = []
+  let canExec = limit
+  function handleTask(fn: Fn, ...args: unknown[]) {
+    canExec--
+    Promise.resolve(fn(...args)).finally(() => {
+      console.log(args)
+      canExec++
+      const topTemp = queue.pop()
+      topTemp && handleTask(topTemp?.[0], topTemp?.[1])
+    })
+  }
+  return function limitFunc(fn: FnP, ...args: unknown[]) {
+    if (canExec <= 0) {
+      queue.push([fn, args])
+    } else {
+      handleTask(fn, args)
+    }
+  }
+}
+
+/**
+ * newFuncLimit 执行返回一个函数：可以传入一个Promise是自定义的并发的promise
+ */
+const limitFunc = newFuncLimit(3)
+
+limitFunc(() => sleep(2000), 'first')
+limitFunc(() => sleep(1000), 'second')
+limitFunc(() => sleep(3000), 'third')
+limitFunc(() => sleep(1000), 'fourth')

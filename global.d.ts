@@ -17,5 +17,12 @@ interface Function {
 interface Function {
   myBind: CallableFunction['bind']
 }
+/**
+ * 单纯表示函数类型
+ */
+type Fn = (...args: unknown[]) => unknown
 
-type Fn = (...args: any[]) => any
+/**
+ * 返回Promise的函数类型
+ */
+type FnP = (...args: unknown[]) => Promise<unknown>
