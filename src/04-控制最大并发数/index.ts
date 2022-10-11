@@ -9,38 +9,37 @@ import { generatePromiseList } from '../utils'
  * @param limit 同时最大任务限制
  * @param iteratorFn 对每个任务的处理函数
  */
-export const promiseLimit = <T extends fn>(
-  tasks: T[],
+export const promiseLimit = (
+  tasks: Fn[],
   limit: number,
-  iteratorFn?: <R>(
-    item: ReturnType<T> extends Promise<infer P> ? P : ReturnType<T>
-  ) => R
+  iteratorFn?: (
+    item: ReturnType<Fn> extends Promise<infer P> ? P : ReturnType<Fn>
+  ) => any
 ) => {
-  type ResultType = ReturnType<T> extends Promise<infer P> ? P : ReturnType<T>
   const len = tasks.length
   const min = Math.min(len, limit)
   let i = 0
-  const result: ResultType[] = []
+  const result: (ReturnType<Fn> extends Promise<infer P>
+    ? P
+    : ReturnType<Fn>)[] = []
+
   let finishedNum = 0
   return new Promise(resolve => {
     const handleTask = async (index: number) => {
       if (index >= len) {
         return
       }
-      let taskResult = tasks[index](index)
-      if (taskResult instanceof Promise) {
-        taskResult = await taskResult.catch(e => e)
-      }
+      const taskResult = await Promise.resolve(tasks[index](index))
       finishedNum++
-      iteratorFn?.(taskResult as ResultType)
-      result[index] = taskResult as ResultType
+      iteratorFn?.(taskResult)
+      result[index] = taskResult
       // 完成
       if (finishedNum === len) {
         resolve(result)
         return
       }
       /**
-       * 这里要注意：i一开始的值就是下一位
+       * 这里要注意：i一开始的值就是我们下一位要处理的值。
        */
       handleTask(i)
       i++
@@ -50,9 +49,10 @@ export const promiseLimit = <T extends fn>(
     }
   })
 }
-
-const taskList = generatePromiseList(10)
-promiseLimit(taskList, 3).then(console.log)
+const taskList = generatePromiseList(5)
+promiseLimit(taskList, 3, (index?: number) => {
+  return index
+}).then(console.log)
 
 /**
  * 控制并发数的基本思路：

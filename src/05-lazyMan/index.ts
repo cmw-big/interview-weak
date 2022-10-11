@@ -1,5 +1,5 @@
 ﻿class LazyMan {
-  private tasks: fn[] = []
+  private tasks: Fn[] = []
   private name = ''
   constructor(name: string) {
     this.name = name
