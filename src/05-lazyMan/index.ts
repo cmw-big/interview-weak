@@ -1,4 +1,4 @@
-﻿export class LazyMan {
+﻿class LazyMan {
   private tasks: Fn[] = []
   private name = ''
   constructor(name: string) {

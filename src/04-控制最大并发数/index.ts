@@ -1,7 +1,8 @@
-﻿/**
+﻿import { sleep } from './../utils/sleep'
+/**
  * 控制任务的最大并发数
  */
-import { generatePromiseList, sleep } from '../../utils'
+import { generatePromiseList } from '../utils'
 
 /**
  *
