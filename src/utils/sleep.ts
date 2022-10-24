@@ -9,6 +9,7 @@
 export const sleep = <T>(time: number, value?: T): Promise<T | undefined> => {
   return new Promise(resolve => {
     setTimeout(() => {
+      console.log(time)
       resolve(value)
     }, time)
   })
@@ -21,8 +22,7 @@ export function generatePromiseList(num: number) {
     ...args: T[]
   ) => Promise<number | undefined>)[] = []
   for (let i = 0; i < num; i++) {
-    taskList.push((index: number) => {
-      console.log(index)
+    taskList.push(() => {
       return sleep(randomInt(0, 10000), randomInt(0, 100))
     })
   }
