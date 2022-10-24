@@ -55,4 +55,30 @@ function longestValidParentheses1(s: string): number {
   return max
 }
 
-console.log(longestValidParentheses1('()(())'))
+function longestValidParentheses2(s: string): number {
+  if (s.length < 2) {
+    return 0
+  }
+  let len = 0
+  let maxLen = 0
+  // 栈的方式
+  // 栈中存储了当前左括号的索引，
+  const stack: number[] = [-1]
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === '(') {
+      stack.push(i)
+    } else {
+      if (s[stack[stack.length - 1]] === '(') {
+        len = i - stack[stack.length - 2]
+        maxLen = Math.max(len, maxLen)
+        stack.pop()
+      } else {
+        stack.push(i)
+        len = 0
+      }
+    }
+  }
+  return maxLen
+}
+
+console.log(longestValidParentheses2('()(())'))
